@@ -1,28 +1,28 @@
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FitnessTracker {
-    private List<User> users;
+    private Map<String, User> users;
 
     public FitnessTracker() {
-        this.users = new ArrayList<>();
+        this.users = new HashMap<>();
     }
 
     public boolean registerUser(String username, String password) {
-        for (User user : users) {
-            if (user.getUsername().equals(username)) {
-                return false; // Username already exists
-            }
+        if (!users.containsKey(username)) {
+            users.put(username, new User(username, password));
+            return true;
         }
-        users.add(new User(username, password));
-        return true;
+        return false;
     }
 
     public User loginUser(String username, String password) {
-        for (User user : users) {
-            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                return user; // User found, return the user object
+        if (users.containsKey(username)) {
+            User user = users.get(username);
+            if (user.getPassword().equals(password)) {
+                return user;
             }
         }
-        return null; // User not found
+        return null;
     }
 }
