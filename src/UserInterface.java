@@ -1,4 +1,4 @@
-import java.util.*;
+import java.util.Scanner;
 
 public class UserInterface {
     private FitnessTracker fitnessTracker;
@@ -52,6 +52,8 @@ public class UserInterface {
         User loggedInUser = fitnessTracker.loginUser(loginUsername, loginPassword);
         if (loggedInUser != null) {
             System.out.println("Login successful. Welcome, " + loggedInUser.getUsername() + "!");
+
+            // Interaction with the logged-in user
             handleUserActions(loggedInUser);
         } else {
             System.out.println("Invalid username or password.");
@@ -60,23 +62,17 @@ public class UserInterface {
 
     private void handleUserActions(User user) {
         while (true) {
-            System.out.println("1. Track food intake\n2. Track exercise\n3. Calculate net calories\n4. Logout");
+            System.out.println("1. Track food intake\n2. Track exercise\n3. Calculate net calories\n4. Suggest exercises\n5. Logout");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
 
             switch (choice) {
                 case 1:
-                    System.out.print("Enter calories consumed: ");
-                    int caloriesConsumed = scanner.nextInt();
-                    user.addFoodIntakeCalories(caloriesConsumed);
-                    System.out.println("Calories consumed added successfully.");
+                    user.selectFood();
                     break;
                 case 2:
-                    System.out.print("Enter calories burned: ");
-                    int caloriesBurned = scanner.nextInt();
-                    user.addExerciseCalories(caloriesBurned);
-                    System.out.println("Calories burned added successfully.");
+                    user.selectExercise();
                     break;
                 case 3:
                     int netCalories = user.calculateNetCalories();
@@ -90,11 +86,19 @@ public class UserInterface {
                     }
                     break;
                 case 4:
+                    user.suggestActivities(5);
+                    break;
+                case 5:
                     System.out.println("Logging out...");
                     return;
                 default:
                     System.out.println("Invalid choice.");
             }
         }
+    }
+
+    public static void main(String[] args) {
+        UserInterface userInterface = new UserInterface();
+        userInterface.run();
     }
 }
